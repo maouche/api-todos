@@ -74,9 +74,7 @@ The body must have:
 * `id`: The id
 
 ```json
-[
-  {todo}
-]
+{id}
 ```
 
 
