@@ -51,6 +51,34 @@ const updateTodo = (req, res) => {
     }
 };
 
+const completedTodo = (req, res) => {
+    try {
+        // if user connect is user_id in todo
+		client.get(
+            "SELECT * FROM todos WHERE id=? AND id_user=?",
+            [req.body.id, req.user.id],
+            (error, todo) => {
+                if (error) throw error;
+                if (todo) {
+					Todo.completed({ id: req.body.id, completed: req.body.completed },
+						(todo) => {
+							res.status(200).json(todo);
+						}
+					);
+				} else {
+                    res.status(403).json({
+                        message:
+                            "You do not have permission to change this todo.",
+                    });
+				}
+			}
+		)
+    } catch (error) {
+        console.log(error);
+        res.status(500).json(error);
+    }
+};
+
 const deleteTodo = (req, res) => {
     try {
 		client.get(
@@ -73,4 +101,4 @@ const deleteTodo = (req, res) => {
     }
 };
 
-module.exports = { todos, addTodo, updateTodo, deleteTodo };
+module.exports = { todos, addTodo, updateTodo, completedTodo, deleteTodo };

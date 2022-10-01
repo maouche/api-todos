@@ -21,6 +21,14 @@ class Todo {
 		})
 	}
 
+	static completed(data, cb) {
+		let todo = { id: data.id, completed: data.completed };
+		client.run("UPDATE todos SET completed=? WHERE id=?", [todo.completed, todo.id], (error) => {
+			if(error) throw error
+			cb(todo);
+		})
+	}
+
 	static delete(id, cb) {
 		client.run("DELETE FROM todos WHERE id=?", [id], (error) => {
 			if(error) throw error
